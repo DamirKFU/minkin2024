@@ -1,5 +1,6 @@
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
+from app.smtp_ssl_handler import SMTP_SSLHandler
 import os
 from flask import Flask, request, current_app
 from flask_sqlalchemy import SQLAlchemy
@@ -50,9 +51,9 @@ def create_app(config_class=Config):
             secure = None
             if app.config["MAIL_USE_TLS"]:
                 secure = ()
-            mail_handler = SMTPHandler(
+            mail_handler = SMTP_SSLHandler(
                 mailhost=(app.config["MAIL_SERVER"], app.config["MAIL_PORT"]),
-                fromaddr="no-reply@" + app.config["MAIL_SERVER"],
+                fromaddr=app.config["MAIL_USERNAME"],
                 toaddrs=app.config["ADMINS"],
                 subject="Microblog Failure",
                 credentials=auth,
