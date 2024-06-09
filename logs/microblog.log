@@ -40,3 +40,6 @@ AttributeError: 'str' object has no attribute 'strftime'
 2024-06-09 12:34:52,447 INFO: minlin2024 [in /home/alucard/python/kfu/minkin2024/app/__init__.py:79]
 2024-06-09 12:37:24,025 INFO: minlin2024 [in /home/alucard/python/kfu/minkin2024/app/__init__.py:79]
 2024-06-09 12:40:10,207 INFO: minlin2024 [in /home/alucard/python/kfu/minkin2024/app/__init__.py:79]
+2024-06-09 12:41:46,801 INFO: minlin2024 [in /home/alucard/python/kfu/minkin2024/app/__init__.py:79]
+2024-06-09 12:46:25,348 INFO: minlin2024 [in /home/alucard/python/kfu/minkin2024/app/__init__.py:79]
+2024-06-09 12:47:11,544 INFO: minlin2024 [in /home/alucard/python/kfu/minkin2024/app/__init__.py:79]
