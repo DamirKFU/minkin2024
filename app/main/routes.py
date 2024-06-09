@@ -1,5 +1,6 @@
 from flask import render_template
 from flask_login import login_required
+from flask_babel import _
 import sqlalchemy as sa
 from app import db
 from app.models import User
