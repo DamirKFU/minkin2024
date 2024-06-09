@@ -2,8 +2,12 @@ from datetime import datetime, timezone
 from typing import Optional
 import sqlalchemy as sa
 import sqlalchemy.orm as so
+from flask import current_app
+from time import time
 from flask_login import UserMixin
-from app import db
+from werkzeug.security import generate_password_hash, check_password_hash
+import jwt
+from app import db, login
 
 
 class User(UserMixin, db.Model):
@@ -24,12 +28,42 @@ class User(UserMixin, db.Model):
         sa.String(256),
     )
     exp: so.Mapped[int] = so.mapped_column(
-        sa.INTEGER(),
+        sa.INTEGER(), default=0,
     )
     messages_sent: so.WriteOnlyMapped['Chat'] = so.relationship(
         foreign_keys='Chat.wrt_user', back_populates='author')
     messages_received: so.WriteOnlyMapped['Chat'] = so.relationship(
         foreign_keys='Chat.who', back_populates='recipient')
+    
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+    
+    def get_id(self):
+           return (self.id_user)
+    
+    def get_reset_password_token(self, expires_in=600):
+        return jwt.encode(
+            {'reset_password': self.id_user, 'exp': time() + expires_in},
+            current_app.config['SECRET_KEY'], algorithm='HS256')
+
+    @staticmethod
+    def verify_reset_password_token(token):
+        try:
+            id = jwt.decode(token, current_app.config['SECRET_KEY'],
+                            algorithms=['HS256'])['reset_password']
+        except Exception:
+            return
+        return db.session.get(User, id)
+    
+    
+@login.user_loader
+def load_user(id_user):
+    return db.session.get(User, int(id_user))
+
 
 
 class Avatar(db.Model):
